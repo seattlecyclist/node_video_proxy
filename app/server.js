@@ -1,10 +1,19 @@
-const http = require('http')
-const port = 3000
+import proxy from './proxy';
+
+const http = require('http');
+const url = require('url');
+
+const port = 3000;
 
 const requestHandler = (request, response) => {
-  console.log(request.url)
-  response.end('Hello Node.js Server!')
-}
+
+  const url_parts = url.parse(request.url, true);
+  const query = url_parts.query;
+
+  if (request.url.match(/video/)) {
+    proxy(request, response);
+  }
+};
 
 const server = http.createServer(requestHandler)
 
